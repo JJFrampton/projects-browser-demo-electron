@@ -142,8 +142,37 @@ view.addEventListener('did-finish-load', updateNav);
 
 
 
-// To Do / Continue 
+// To Do / Continue
 // Feedback when loading
 // Feedback with favorite icon to show that bookmark is not-added/added/already-added
 // Tabs !:@
-// Option to remove bookmarks.  
+// Option to remove bookmarks.
+
+// keyboard shortcuts
+const ipc = require('electron').ipcRenderer;
+function filterKeyUps(e) {
+  // if (e.keyCode === && e.altKey ) { window.alert("WORKING")}
+  if (e.key === "ArrowUp") { window.alert("WORKING")}
+  ipc.send('toggleBar');
+  if (e.key === "d") {
+    let body = document.getElementsByTagName('body')[0];
+    // let body = ById('navigation')
+    window.alert(JSON.stringify(body.style['-webkit-app-region']))
+    let style = body.style['-webkit-app-region'];
+    let newStyle = style === 'drag'? 'no-drag': 'drag'
+    body.style['-webkit-app-region'] = newStyle
+    window.alert(JSON.stringify(body.style['-webkit-app-region']))
+  }
+}
+window.addEventListener('keyup', filterKeyUps, true)
+
+ipc.on('toggleMovable', (event, path) => {
+  console.log('In main, changin browser window');
+  mainWindow.setAutoHideMenuBar(true)
+})
+
+// .draggable {
+//   app-region: drag;
+//   /* Pre-fix app-region during standardization process */
+//   -webkit-app-region: drag;
+// }
